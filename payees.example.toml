@@ -1,0 +1,7 @@
+# People the agent is allowed to pay. The model only ever sees the names.
+# setup_wallet.py writes payees.toml for you with a test wallet as Alice.
+
+[[payees]]
+name = "Alice"
+address = "0x0000000000000000000000000000000000000000"
+note = "Replace with a real Arc Testnet address"
