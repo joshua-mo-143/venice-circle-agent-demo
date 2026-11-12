@@ -8,8 +8,9 @@ from decimal import Decimal
 from pathlib import Path
 
 import httpx
+from circle.web3.developer_controlled_wallets import ApiException
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import AuthenticationError, OpenAI
 
 import ui
 from policy import Policy, load_payees
@@ -88,12 +89,18 @@ def main() -> None:
     venice_key = os.environ["VENICE_API_KEY"]
     with ui.working("Connecting to Venice and Circle"):
         model, privacy = pick_model(venice_key)
-        wallet = Wallet(
-            api_key=os.environ["CIRCLE_API_KEY"],
-            entity_secret=os.environ["CIRCLE_ENTITY_SECRET"],
-            wallet_id=os.environ["CIRCLE_WALLET_ID"],
-        )
-        address, balance = wallet.address(), wallet.usdc_balance()
+        try:
+            wallet = Wallet(
+                api_key=os.environ["CIRCLE_API_KEY"],
+                entity_secret=os.environ["CIRCLE_ENTITY_SECRET"],
+                wallet_id=os.environ["CIRCLE_WALLET_ID"],
+            )
+            address, balance = wallet.address(), wallet.usdc_balance()
+        except ApiException as error:
+            sys.exit(
+                f"Circle rejected the request ({error.status}). "
+                "Check CIRCLE_API_KEY and CIRCLE_WALLET_ID in .env."
+            )
     ui.banner(model, privacy, address, balance, BLOCKCHAIN, policy)
 
     venice = OpenAI(api_key=venice_key, base_url=VENICE_URL)
@@ -113,6 +120,9 @@ def main() -> None:
         messages.append({"role": "user", "content": text})
         try:
             reply = run_turn(venice, model, messages, tools)
+        except AuthenticationError:
+            ui.error("Venice rejected the API key. Check VENICE_API_KEY in .env, then restart.")
+            continue
         except Exception as error:  # noqa: BLE001
             # Keep the turn: it may hold the result of a payment that went through.
             ui.error(f"{type(error).__name__}: {error}")
