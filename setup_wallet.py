@@ -1,6 +1,6 @@
 """One-off setup: create the agent's wallet, plus a second wallet to pay while testing.
 
-Run it once, add CIRCLE_WALLET_ID to .env, then fund the agent's address from
+Run it once, fill in CIRCLE_WALLET_ID in .env, then fund the agent's address from
 https://faucet.circle.com (pick Arc Testnet).
 """
 
@@ -71,7 +71,7 @@ def main() -> None:
         )
         print(f"Wrote {PAYEES} with Alice at {alice.address}")
 
-    print("\nAdd this line to .env:")
+    print("\nSet this in .env:")
     print(f"  CIRCLE_WALLET_ID={agent.id}")
     print("\nThen fund the agent's wallet at https://faucet.circle.com (pick Arc Testnet):")
     print(f"  {agent.address}")

@@ -1,8 +1,8 @@
 """Everything the agent shows in the terminal, and the two places it reads from the keyboard.
 
-Text from the model, Circle or payees.toml only reaches the screen through plain(): control characters
-become spaces, and rich never parses a Text as markup, so none of it can restyle the terminal or fake
-the approval box.
+Text from the model, Circle or payees.toml only reaches the screen through terminal_safe(), so control
+characters become spaces. Apart from the agent's replies, which are rendered as Markdown, it's shown as
+a Text, which rich never parses as markup, so none of it can restyle the terminal or fake the approval box.
 """
 
 from __future__ import annotations

@@ -54,7 +54,7 @@ TOOLS = [
                         "description": "A short note saying what the payment is for.",
                     },
                 },
-                "required": ["payee", "amount", "memo"],
+                "required": ["payee", "amount"],
             },
         },
     },

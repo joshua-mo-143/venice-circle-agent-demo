@@ -11,11 +11,12 @@ from circle.web3 import developer_controlled_wallets as dcw
 from circle.web3 import utils
 from circle.web3.developer_controlled_wallets.exceptions import ServiceException
 
+from policy import USDC_STEP
+
 BLOCKCHAIN = "ARC-TESTNET"
 # USDC's ERC-20 interface on Arc Testnet:
 # https://developers.circle.com/stablecoins/usdc-contract-addresses
 USDC_ADDRESS = "0x3600000000000000000000000000000000000000"
-USDC_STEP = Decimal("0.000001")
 EXPLORER_TX = "https://explorer.testnet.arc.io/tx/"
 DID_NOT_HAPPEN = {"FAILED", "CANCELLED", "DENIED"}
 FINAL_STATES = DID_NOT_HAPPEN | {"COMPLETE"}
